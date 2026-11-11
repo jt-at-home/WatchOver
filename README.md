@@ -1,5 +1,7 @@
 # WatchOver
 
+[![build](https://github.com/jt-at-home/WatchOver/actions/workflows/build.yml/badge.svg)](https://github.com/jt-at-home/WatchOver/actions/workflows/build.yml)
+
 **A quiet check-in, twice a day.**
 
 At 12:00 and 22:00, WatchOver asks one question — *has this phone been picked up since the last check?* If it has, nothing happens. If it hasn't, the phone sounds an alert, lights its screen and asks you to tap **I'm here**. If you don't, it texts the person you nominated.
@@ -83,6 +85,16 @@ The app will not arm until the checklist is green, and it never asks for locatio
 Measured over 45 hours of real use: **0.0593 mAh**, about 0.0006% of a 5032 mAh battery per day, with 35 ms of wake locks in total. The sensor hub's own draw isn't attributed by Android; at the ~1 mW a significant-motion trigger uses, the realistic total is around **0.1%/day** — well inside the under-1%-per-day target.
 
 The target is a *quiet-day* number. Alerts deliberately spend power: ringing, waking the screen and holding it are the feature, not overhead.
+
+## Privacy
+
+There is no server, no account and no analytics.
+
+- **No `INTERNET` permission.** The app cannot reach the network at all — the SMS is handed to the carrier, not sent over data.
+- **Everything stays on the phone.** Your contact's number, your check times and the event log live in the app's private storage.
+- **No backup.** Android backup is disabled for this app, so that data is not copied to Google's servers either.
+- **One sensor.** The motion sensor is the only one it reads, and the only thing recorded is a timestamp.
+- **Uninstalling removes all of it.**
 
 ## How it's built
 
