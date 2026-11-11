@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WatchOver</string>
+
+    <string name="watch_notice_title">Check-in monitoring</string>
+    <string name="watch_notice_text">Watching for motion — no movement recorded yet</string>
+    <string name="watch_notice_text_with_motion">Watching · last movement %1$s</string>
+
+    <string name="alert_title">Are you there?</string>
+    <string name="alert_text">Check-in since %1$s. Tap \"I\'m here\" by %2$s, or your contact will be texted.</string>
+    <string name="alert_text_escalated">Your contact has been texted. Tap "I\'m here" to send them an all-clear.</string>
+    <string name="alert_public_text">Pickup check-in — open to respond</string>
+    <string name="action_im_here">I\'m here</string>
+
+    <string name="escalation_failed_title">Could not reach your contact</string>
+    <string name="escalation_failed_text">The check-in was not acknowledged and the SMS could not be sent. Open WatchOver to see why.</string>
+</resources>

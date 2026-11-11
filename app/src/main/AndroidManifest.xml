@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Notifications and the full-screen alert -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Exact, Doze-proof scheduling (sideloaded build; see design §3) -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Continuous watch -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Escalation. No INTERNET permission: v1 is SMS-only. -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <!-- The app is useful only on a phone; marking it optional keeps tablets installable. -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <application
+        android:name=".WatchOverApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WatchOver">
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WatchOver">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".alert.AlertActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.WatchOver"
+            android:turnScreenOn="true" />
+
+        <service
+            android:name=".watch.WatchService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            android:stopWithTask="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitors the motion sensor so the app can tell whether the phone has been picked up during user-configured check-in intervals." />
+        </service>
+
+        <receiver
+            android:name=".schedule.AlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".schedule.RescheduleReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".alert.AckReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".escalate.SmsDeliveryReceiver"
+            android:exported="false" />
+
+        <!-- Debug builds only: every action is a no-op unless BuildConfig.DEBUG. -->
+        <receiver
+            android:name=".debug.DebugReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.watchover.debug.CHECK" />
+                <action android:name="com.watchover.debug.ACK" />
+                <action android:name="com.watchover.debug.MOVE" />
+                <action android:name="com.watchover.debug.ARM" />
+                <action android:name="com.watchover.debug.DISARM" />
+                <action android:name="com.watchover.debug.CONFIGURE" />
+                <action android:name="com.watchover.debug.RESCHEDULE" />
+                <action android:name="com.watchover.debug.DEADLINE" />
+                <action android:name="com.watchover.debug.STOP_WATCH" />
+                <action android:name="com.watchover.debug.SET_TIME" />
+                <action android:name="com.watchover.debug.TEST_SMS" />
+                <action android:name="com.watchover.debug.CLEAR_LOG" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
